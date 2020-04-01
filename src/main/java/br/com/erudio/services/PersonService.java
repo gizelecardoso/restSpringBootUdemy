@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.erudio.converter.DozerConverter;
+import br.com.erudio.data.model.Person;
+import br.com.erudio.data.vo.PersonVO;
 import br.com.erudio.exception.ResourceNotFoundException;
-import br.com.erudio.model.Person;
 import br.com.erudio.repository.PersonRepository;
 
 @Service
@@ -15,35 +17,43 @@ public class PersonService {
 	@Autowired
 	PersonRepository repository;
 
-	public Person create(Person person) {
+	public PersonVO create(PersonVO personVO) {
+		
+		var entity = DozerConverter.parseObject(personVO, Person.class);
 
-		repository.save(person);
+		var vo = DozerConverter.parseObject(repository.save(entity), PersonVO.class);
 
-		return person;
+		return vo;
 	}
 
-	public List<Person> findAll() {
+	public List<PersonVO> findAll() {
 
-		return repository.findAll();
+		return DozerConverter.parseListObjects(repository.findAll(), PersonVO.class);
 
 	}
 
-	public Person findById(Long id) {
+	public PersonVO findById(Long id) {
+		
+		var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+	
+		return DozerConverter.parseObject(entity, PersonVO.class);
 
-		return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+	
 	}
 
-	public Person update(Person person) {
+	public PersonVO update(PersonVO PersonVO) {
 
-		Person entity = repository.findById(person.getId())
+		var entity = repository.findById(PersonVO.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
-		entity.setFirstName(person.getFirstName());
-		entity.setLastName(person.getLastName());
-		entity.setAddress(person.getAddress());
-		entity.setGender(person.getGender());
+		entity.setFirstName(PersonVO.getFirstName());
+		entity.setLastName(PersonVO.getLastName());
+		entity.setAddress(PersonVO.getAddress());
+		entity.setGender(PersonVO.getGender());
 
-		return repository.save(entity);
+		var vo = DozerConverter.parseObject(repository.save(entity), PersonVO.class);
+
+		return vo;
 
 	}
 

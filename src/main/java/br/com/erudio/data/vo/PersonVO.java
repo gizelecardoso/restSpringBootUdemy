@@ -1,49 +1,16 @@
-package br.com.erudio.model;
+package br.com.erudio.data.vo;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "PERSON")
-public class Person implements Serializable{
+public class PersonVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID")
 	private Long id;
-	
-	@Column(name = "FIRST_NAME", nullable = false, length = 80)
 	private String firstName;
-	
-	@Column(name = "LAST_NAME", nullable = false, length = 80)
 	private String lastName;
-	
-	@Column(name = "ADDRESS", nullable = false, length = 100)
 	private String address;
-	
-	@Column(name = "GENDER", nullable = false, length = 6)
 	private String gender;
 	
-	public Person(){}
-	
-	public Person(Long id, String firstName, String lastName, String address, String gender) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.address = address;
-		this.gender = gender;
-	}
-
-
 	public Long getId() {
 		return id;
 	}
@@ -113,7 +80,7 @@ public class Person implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Person other = (Person) obj;
+		PersonVO other = (PersonVO) obj;
 		if (address == null) {
 			if (other.address != null)
 				return false;
@@ -141,10 +108,7 @@ public class Person implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
-	
+
 	
 	
 
