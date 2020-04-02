@@ -13,9 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 import br.com.erudio.data.vo.v1.PersonVO;
 import br.com.erudio.services.PersonService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
+@Api(value="Person Endpoint", description = "Description for Person", tags = {"PersonEndpoint", "outra Tag"})
 @RestController
 @RequestMapping("api/person/v1")
 public class PersonController {
@@ -25,33 +31,55 @@ public class PersonController {
 	private PersonService service;
 
 	
+	@ApiOperation(value = "Find All People recorded")
 	@GetMapping(produces = {"application/json" , "application/xml" , "application/x-yaml"})
 	public List<PersonVO> findAll(){
 		
-		return service.findAll();
+		List<PersonVO> persons = service.findAll();
+		
+		persons.stream().forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+		
+		return persons;
 	}
 	
+	@ApiOperation(value = "Find People by Id")
 	@GetMapping(value = "/{id}", produces = {"application/json" , "application/xml", "application/x-yaml"})
 	public PersonVO findById(@PathVariable(value="id") Long id ){
 		
-		return service.findById(id);
+		PersonVO personVO = service.findById(id);
+		
+		personVO.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+		
+		return personVO;
 	}
 	
-
+	
+	@ApiOperation(value = "Create People")
 	@PostMapping(produces = {"application/json" , "application/xml", "application/x-yaml"},
 			consumes = {"application/json" , "application/xml", "application/x-yaml"})
-	public PersonVO create(@RequestBody PersonVO personVO ){
+	public PersonVO create(@RequestBody PersonVO person ){
 		
-		return service.create(personVO);
+		PersonVO personVO = service.create(person);
+		
+		personVO.add(linkTo(methodOn(PersonController.class).findById(personVO.getKey())).withSelfRel());
+		
+		return personVO;
 	}
 	
+	@ApiOperation(value = "Update People")
 	@PutMapping(produces = {"application/json" , "application/xml", "application/x-yaml"},
 			consumes = {"application/json" , "application/xml", "application/x-yaml"})
-	public PersonVO update(@RequestBody PersonVO personVO ){
+	public PersonVO update(@RequestBody PersonVO person ){
 		
-		return service.update(personVO);
+		PersonVO personVO = service.update(person);
+		
+		personVO.add(linkTo(methodOn(PersonController.class).findById(personVO.getKey())).withSelfRel());
+		
+		return personVO;
+		
 	}
 	
+	@ApiOperation(value = "Delete People")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value="id") Long id ){
 		

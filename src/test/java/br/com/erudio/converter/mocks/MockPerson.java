@@ -52,7 +52,7 @@ public class MockPerson {
 	private PersonVO mockVO(Integer number) {
 		PersonVO person = new PersonVO();
 		
-		person.setId(number.longValue());
+		person.setKey(number.longValue());
 		person.setFirstName("First Name Test" + number);
 		person.setLastName("Last Name Test" + number);
 		person.setAddress("Address Test" + number);

@@ -1,7 +1,8 @@
 /target/
 
-/.classpath
-/.project
-/.maven
-/.settings
-/build/
+.classpath
+.project
+.maven
+.settings
+build/
+.gitignore
