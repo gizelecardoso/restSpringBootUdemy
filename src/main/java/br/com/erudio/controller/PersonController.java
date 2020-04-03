@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import br.com.erudio.services.PersonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+//@CrossOrigin
 @Api(value="Person Endpoint", description = "Description for Person", tags = {"PersonEndpoint", "outra Tag"})
 @RestController
 @RequestMapping("api/person/v1")
@@ -42,6 +44,7 @@ public class PersonController {
 		return persons;
 	}
 	
+	//@CrossOrigin(origins = "http://localhost:8080")
 	@ApiOperation(value = "Find People by Id")
 	@GetMapping(value = "/{id}", produces = {"application/json" , "application/xml", "application/x-yaml"})
 	public PersonVO findById(@PathVariable(value="id") Long id ){
@@ -52,7 +55,6 @@ public class PersonController {
 		
 		return personVO;
 	}
-	
 	
 	@ApiOperation(value = "Create People")
 	@PostMapping(produces = {"application/json" , "application/xml", "application/x-yaml"},
