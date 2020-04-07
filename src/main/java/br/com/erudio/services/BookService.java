@@ -26,7 +26,9 @@ public class BookService {
 	
 	public BookVO findById(Long id) {
 		
-		BookVO booksVO = DozerConverter.parseObject(repository.findById(id), BookVO.class);
+		var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+		
+		BookVO booksVO = DozerConverter.parseObject(entity, BookVO.class);
 		
 		return booksVO;
 	}
